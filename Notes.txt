@@ -1,0 +1,38 @@
+# Notes 
+# Paper: Gradient-Enhancing Conversion for Illumination-Robust Lane Detection
+# Authors: Yoo, Yang, Sohn
+
+Assumptions:
+1. Given only RGB images
+2. There are ONLY yellow and white lanes
+3. For our case (since the authors don't describe how they do it), we assume that a white lane in an image is a white lane, and everything else is a road. The same holds for a yellow lane.
+4. Choice of k = 5 previous frames used to train LDA
+5. For update: lane detected (if any) to the left of center is yellow, to the right is white.
+
+Main Steps:
+
+Input: current image, previous images.
+
+a. Find the gradient enhancing vectors using LDA: 
+v_w, v_y, where v_w are the weights on R, G, and B that separate the white lane from road. v_y are the weights on R, G, B that separate the yellow lane from road. 
+Output: two gray images.
+
+b. For each gray image:
+Apply adaptive canny edge detection.
+Done by computing thresholds th_l and th_s and d (d = the intersection of the lane and road distributions? Refer to Figure 7).
+Note that setting the thresholds will, in turn, output some candidate edges. We'll have to create some function to determine if there exists a path from candidate edge to known lane pixel.
+Output: two images with edges detected
+
+c. For both canny images, perform OR operation:
+Combines both images and helps reduce noise.
+
+d. Hough Transform:
+
+
+
+
+
+# Notes on project:
+
+Challenges we faced:
+1. Labeling the first set of 5 images. i.e. it was difficult to determine, in a pixelated image, where a lane (yellow or white) ended because it gradually changed colors along the border of the lane.
